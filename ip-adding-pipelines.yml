@@ -37,4 +37,4 @@ jobs:
         COSMOS_ACCOUNT: ${{ secrets.COSMOS_ACCOUNT }}
         BRANCH: ${{ github.ref_name }}
       run: |
-        python add_ip_cosmos/add_ip_cosmos.py
+        python add_ip_cosmos.py
