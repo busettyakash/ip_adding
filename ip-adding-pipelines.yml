@@ -1,0 +1,40 @@
+name: Update CosmosDB IP
+
+on:
+  workflow_dispatch:   # ✅ Manual trigger in GitHub
+    inputs:
+      NEW_IPS:
+        description: "Enter one or more IP addresses (space-separated)"
+        required: true
+        default: ""
+
+jobs:
+  update-ip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install azure-identity azure-mgmt-cosmosdb pytz
+
+    - name: Run CosmosDB IP Update Script
+      env:
+        NEW_IPS: ${{ github.event.inputs.NEW_IPS }}
+        TENANT_ID: ${{ secrets.TENANT_ID }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+        COSMOS_ACCOUNT: ${{ secrets.COSMOS_ACCOUNT }}
+        BRANCH: ${{ github.ref_name }}
+      run: |
+        python add_ip_cosmos/add_ip_cosmos.py
