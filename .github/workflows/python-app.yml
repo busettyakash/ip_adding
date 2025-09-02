@@ -1,39 +1,40 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Python application
+name: Update CosmosDB IP
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  contents: read
+  workflow_dispatch:   # ✅ Manual trigger in GitHub
+    inputs:
+      NEW_IPS:
+        description: "Enter one or more IP addresses (space-separated)"
+        required: true
+        default: ""
 
 jobs:
-  build:
-
+  update-ip:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
-        python-version: "3.10"
-    - name: Install dependencies
+        python-version: '3.x'
+
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
+        pip install azure-identity azure-mgmt-cosmosdb pytz
+
+    - name: Run CosmosDB IP Update Script
+      env:
+        NEW_IPS: ${{ github.event.inputs.NEW_IPS }}
+        TENANT_ID: ${{ secrets.TENANT_ID }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+        COSMOS_ACCOUNT: ${{ secrets.COSMOS_ACCOUNT }}
+        BRANCH: ${{ github.ref_name }}
       run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+        python add_ip_cosmos.py
