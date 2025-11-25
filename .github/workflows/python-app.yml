@@ -21,7 +21,7 @@ jobs:
       with:
         python-version: '3.x'
 
-    - name: Install Dependencie
+    - name: Install Dependenciess
       run: |
         python -m pip install --upgrade pip
         pip install azure-identity azure-mgmt-cosmosdb pytz
