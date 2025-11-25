@@ -35,6 +35,5 @@ jobs:
         SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
         RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
         COSMOS_ACCOUNT: ${{ secrets.COSMOS_ACCOUNT }}
-        BRANCH: ${{ github.ref_name }}
       run: |
         python add_ip_cosmos.py
