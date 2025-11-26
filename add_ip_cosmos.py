@@ -8,7 +8,6 @@ from azure.identity import ClientSecretCredential
 from azure.mgmt.cosmosdb import CosmosDBManagementClient
 from azure.mgmt.cosmosdb.models import IpAddressOrRange, DatabaseAccountUpdateParameters
 
-# ====== CONFIGURATION from Pipeline Variables ====== #
 TENANT_ID = os.getenv("TENANT_ID")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
@@ -152,5 +151,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
