@@ -132,7 +132,7 @@ def main():
             time.sleep(60)
 
         poller.result()
-        print("[SUCCESS] All valid IPs added successfully.", flush=True)
+        print("[SUCCESS] All valid IPs have been added successfully.", flush=True)
 
         for ip_rule in new_ip_rules:
             print(f"[INFO] Successfully added [IP: {ip_rule.ip_address_or_range}]", flush=True)
@@ -152,4 +152,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
